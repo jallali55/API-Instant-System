@@ -78,7 +78,7 @@ Le but de l’exercice est de :  développer une application “serveur” expos
 #### Get free parking
 
 ```http
-  GET /api/get-available-park/{isFree}?xPosition=var&yPosition=var
+  GET /api/get-free-park/{isFree}?xPosition=var&yPosition=var
 ```
 
 | Parameter   | Type      | Description                                        |
