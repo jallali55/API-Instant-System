@@ -1,6 +1,8 @@
 package com.instantsystem.parkingapi.Dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.instantsystem.parkingapi.Enum.IsFree;
+
 import java.awt.geom.Point2D;
 
 public class Parking {
@@ -12,7 +14,7 @@ public class Parking {
 
     private int distance;
 
-    private Boolean isFree;
+    private IsFree isFree;
 
     public Parking(String name, int capacity, int availablePlace, Point2D point2D, int distance) {
         this.name = name;
@@ -22,7 +24,7 @@ public class Parking {
         this.distance = distance;
     }
 
-    public Parking(String name, int capacity, int availablePlace, Point2D point2D, int distance, Boolean isFree) {
+    public Parking(String name, int capacity, int availablePlace, Point2D point2D, int distance, IsFree isFree) {
         this.name = name;
         this.capacity = capacity;
         this.availablePlace = availablePlace;
@@ -74,12 +76,12 @@ public class Parking {
         this.distance = distance;
     }
 
-    public Boolean getFree() {
+    public IsFree getIsFree() {
         return isFree;
     }
 
-    public void setFree(Boolean free) {
-        isFree = free;
+    public void setIsFree(IsFree isFree) {
+        this.isFree = isFree;
     }
 
     @Override

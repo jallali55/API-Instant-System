@@ -50,8 +50,14 @@ Le but de l’exercice est de :  développer une application “serveur” expos
        - Au premier lieu on va récupérer les données exposées par le web Service
        - Deuxiéme étape c'est de filtrer ces données en appliquant quelques critéres (Places disponibles , et Approximité)
        - Par la suite ordonner la liste selon l'approximité et retourner le résultat  
+    
+    Création et développement de la méthod getWithFreeCriteria(Double xPosition, Double yPosition,IsFree isFree)
 
-`5 - Créer la classe ParkingController dans le package Controller , par la suite dans la la méthode faire un appelle au service ParkingService et retourner le resultat de getAvailableParking `
+       - Au premier lieu on va récupérer les données exposées par le web Service
+       - Deuxiéme étape c'est de filtrer ces données en appliquant le critére de recherche isFree
+       - Par la suite ordonner la liste selon l'approximité et retourner le résultat  
+
+`5 - Créer la classe ParkingController dans le package Controller , par la suite dans les ws faire un appelle au service ParkingService et retourner le resultat de getAvailableParking et getWithFreeCriteria`
     
 
 
@@ -68,6 +74,18 @@ Le but de l’exercice est de :  développer une application “serveur” expos
 | `diffDistance` | `Integer` | **Required**. le rayon de la recherche |
 | `xPosition` | `Integer` | **Required**. postion x du client |
 | `yPosition` | `Integer` | **Required**. position y du client |
+
+#### Get free parking
+
+```http
+  GET /api/get-available-park/{isFree}?xPosition=var&yPosition=var
+```
+
+| Parameter   | Type      | Description                                        |
+|:------------|:----------|:---------------------------------------------------|
+| `IsFree`    | `IsFree`  | **Required**. Valeurs Possible : PAID,FREE,UNKNOWN |
+| `xPosition` | `Integer` | **Required**. postion x du client                  |
+| `yPosition` | `Integer` | **Required**. position y du client                 |
 
 
 ## Proléme détecté et non résolu

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.instantsystem.parkingapi.Dto.Parking;
+import com.instantsystem.parkingapi.Enum.IsFree;
 import com.instantsystem.parkingapi.Service.ParkingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,24 @@ public class ParkingServiceImpl implements ParkingService {
             parkingList.add(parseNodeToParking(objNode, clientPosition));
         }
 
-        return parkingList.stream().filter(Objects::nonNull).sorted(Comparator.comparingInt(Parking::getDistance)).toList();
+        return parkingList.stream().filter(p->p.getDistance()<diffDistance).filter(p->p.getAvailablePlace()>0).sorted(Comparator.comparingInt(Parking::getDistance)).toList();
+    }
+
+    @Override
+    public List<Parking> getWithFreeCriteria(Double xPosition, Double yPosition,IsFree isFree) throws JsonProcessingException {
+
+        Point2D clientPosition = new Point2D.Double(xPosition, yPosition);
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(uriBase, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode actualObj = mapper.readTree(result);
+        JsonNode recordsNode = actualObj.get("records");
+        List<Parking> parkingList = new ArrayList<>();
+        for (JsonNode objNode : recordsNode) {
+            parkingList.add(parseNodeToParking(objNode, clientPosition));
+        }
+
+        return parkingList.stream().filter(p->p.getIsFree().equals(isFree) || p.getIsFree().equals(IsFree.UNKNOWN)).sorted(Comparator.comparingInt(Parking::getDistance)).toList();
     }
 
     public Parking parseNodeToParking(JsonNode jsonNode, Point2D clientPosition) {
@@ -57,10 +75,10 @@ public class ParkingServiceImpl implements ParkingService {
         } catch (NullPointerException nullPointerException) {
             logger.info("Cannot read location field");
         }
-        Boolean isFree = false;
+        IsFree isFree = IsFree.UNKNOWN;
         int placesRestantes = 0;
         try {
-            isFree = fieldsNode.get("gratuit").asBoolean();
+            isFree = fieldsNode.get("gratuit").asBoolean()?IsFree.FREE:IsFree.PAID;
         } catch (NullPointerException nullPointerException) {
             logger.info("Cannot read gratuit field");
         }
